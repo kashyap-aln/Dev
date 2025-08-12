@@ -1,1 +1,51 @@
+name: Salesforce Deployment
+
+on:
+  push:
+    branches:
+      - '**' # Any branch
+  pull_request:
+    branches:
+      - main # Runs when merging into main
+
+jobs:
+  dev:
+    name: Deploy to DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: DEV deploy
+        run: echo "Deploying to DEV..."
+
+  qa:
+    name: Deploy to QA
+    runs-on: ubuntu-latest
+    needs: dev
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: QA deploy
+        run: echo "Deploying to QA..."
+
+  uat:
+    name: Deploy to UAT
+    runs-on: ubuntu-latest
+    needs: qa
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: UAT deploy
+        run: echo "Deploying to UAT..."
+
+  prod:
+    name: Deploy to PROD
+    runs-on: ubuntu-latest
+    needs: uat
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: PROD deploy
+        run: echo "Deploying to PROD..."
 
